@@ -124,7 +124,6 @@ public class AirportController {
                 count++;
             }
         }
-
         return count;
     }
 
@@ -142,7 +141,7 @@ public class AirportController {
         }
         return flight.getFromCity().name();
     }
-
+      
     @GetMapping("/calculate-revenue-collected/{flightId}")
     public int calculateRevenueOfAFlight(@PathVariable("flightId") Integer flightId) {
         Flight flight = flights.get(flightId);
@@ -153,8 +152,9 @@ public class AirportController {
         int totalRevenue = 3000 * flight.getBookings().size();
         return totalRevenue;
     }
+    
 
-    @PostMapping("/add-passenger")
+     @PostMapping("/add-passenger")
     public String addPassenger(@RequestBody Passenger passenger) {
         passengers.put(passenger.getPassengerId(), passenger);
         return "SUCCESS";
