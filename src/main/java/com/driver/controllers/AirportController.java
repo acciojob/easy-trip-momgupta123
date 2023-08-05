@@ -1,20 +1,11 @@
 package com.driver.controllers;
 
-
 import com.driver.model.Airport;
 import com.driver.model.City;
 import com.driver.model.Flight;
 import com.driver.model.Passenger;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-
-package com.driver.controllers;
 import java.util.*;
 
 @RestController
@@ -22,6 +13,9 @@ public class AirportController {
     private final Map<String, Airport> airports = new HashMap<>();
     private final Map<Integer, Flight> flights = new HashMap<>();
     private final Map<Integer, Passenger> passengers = new HashMap<>();
+
+    public AirportController() {
+    }
 
     @PostMapping("/add_airport")
     public String addAirport(@RequestBody Airport airport) {
@@ -71,7 +65,7 @@ public class AirportController {
         int count = 0;
 
         for (Flight flight : flights.values()) {
-            if (flight.getAirportName().equals(airportName) && flight.getFlightDate().equals(date)) {
+            if (flight.getFromCity().name().equals(airportName) && flight.getFlightDate().equals(date)) {
                 count++;
             }
         }
@@ -146,7 +140,7 @@ public class AirportController {
         if (flight == null) {
             return null;
         }
-        return flight.getAirportName();
+        return flight.getFromCity().name();
     }
 
     @GetMapping("/calculate-revenue-collected/{flightId}")
@@ -166,4 +160,3 @@ public class AirportController {
         return "SUCCESS";
     }
 }
-
