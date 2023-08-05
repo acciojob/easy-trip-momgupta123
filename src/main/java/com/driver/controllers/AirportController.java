@@ -15,7 +15,6 @@ import java.util.Map;
 import java.util.Objects;
 
 package com.driver.controllers;
-
 import java.util.*;
 
 @RestController
@@ -26,22 +25,22 @@ public class AirportController {
 
     @PostMapping("/add_airport")
     public String addAirport(@RequestBody Airport airport) {
-        airports.put(airport.getName(), airport);
+        airports.put(airport.getAirportName(), airport);
         return "SUCCESS";
     }
 
-    @GetMapping("/get-largest-aiport")
+    @GetMapping("/get-largest-airport")
     public String getLargestAirportName() {
         int maxTerminals = 0;
         String largestAirportName = null;
 
         for (Airport airport : airports.values()) {
-            if (airport.getTerminals() > maxTerminals) {
-                maxTerminals = airport.getTerminals();
-                largestAirportName = airport.getName();
-            } else if (airport.getTerminals() == maxTerminals) {
-                if (largestAirportName == null || airport.getName().compareTo(largestAirportName) < 0) {
-                    largestAirportName = airport.getName();
+            if (airport.getNoOfTerminals() > maxTerminals) {
+                maxTerminals = airport.getNoOfTerminals();
+                largestAirportName = airport.getAirportName();
+            } else if (airport.getNoOfTerminals() == maxTerminals) {
+                if (largestAirportName == null || airport.getAirportName().compareTo(largestAirportName) < 0) {
+                    largestAirportName = airport.getAirportName();
                 }
             }
         }
@@ -72,7 +71,7 @@ public class AirportController {
         int count = 0;
 
         for (Flight flight : flights.values()) {
-            if (flight.getAirportName().equals(airportName) && flight.getDate().equals(date)) {
+            if (flight.getAirportName().equals(airportName) && flight.getFlightDate().equals(date)) {
                 count++;
             }
         }
@@ -137,7 +136,7 @@ public class AirportController {
 
     @PostMapping("/add-flight")
     public String addFlight(@RequestBody Flight flight) {
-        flights.put(flight.getId(), flight);
+        flights.put(flight.getFlightId(), flight);
         return "SUCCESS";
     }
 
@@ -163,7 +162,8 @@ public class AirportController {
 
     @PostMapping("/add-passenger")
     public String addPassenger(@RequestBody Passenger passenger) {
-        passengers.put(passenger.getId(), passenger);
+        passengers.put(passenger.getPassengerId(), passenger);
         return "SUCCESS";
     }
 }
+
