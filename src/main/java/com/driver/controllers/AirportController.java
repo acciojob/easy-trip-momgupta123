@@ -65,7 +65,8 @@ public class AirportController {
         int count = 0;
 
         for (Flight flight : flights.values()) {
-            if (flight.getFromCity().name().equals(airportName) && flight.getFlightDate().equals(date)) {
+            if (flight.getFromCity() != null && flight.getFromCity().name().equals(airportName) &&
+                    flight.getFlightDate() != null && flight.getFlightDate().equals(date)) {
                 count++;
             }
         }
@@ -80,7 +81,7 @@ public class AirportController {
             return -1;
         }
 
-        int noOfPeopleWhoHaveAlreadyBooked = flight.getBookings().size();
+        int noOfPeopleWhoHaveAlreadyBooked = flight.getBookings() != null ? flight.getBookings().size() : 0;
         return 3000 + noOfPeopleWhoHaveAlreadyBooked * 50;
     }
 
@@ -90,6 +91,10 @@ public class AirportController {
         Passenger passenger = passengers.get(passengerId);
         if (flight == null || passenger == null) {
             return "FAILURE";
+        }
+
+        if (flight.getBookings() == null) {
+            flight.setBookings(new ArrayList<>());
         }
 
         if (flight.getBookings().size() >= flight.getMaxCapacity() || flight.getBookings().contains(passengerId)) {
@@ -103,7 +108,7 @@ public class AirportController {
     @PutMapping("/cancel-a-ticket")
     public String cancelATicket(@RequestParam("flightId") Integer flightId, @RequestParam("passengerId") Integer passengerId) {
         Flight flight = flights.get(flightId);
-        if (flight == null) {
+        if (flight == null || flight.getBookings() == null) {
             return "FAILURE";
         }
 
@@ -120,7 +125,7 @@ public class AirportController {
         int count = 0;
 
         for (Flight flight : flights.values()) {
-            if (flight.getBookings().contains(passengerId)) {
+            if (flight.getBookings() != null && flight.getBookings().contains(passengerId)) {
                 count++;
             }
         }
@@ -136,25 +141,25 @@ public class AirportController {
     @GetMapping("/get-aiportName-from-flight-takeoff/{flightId}")
     public String getAirportNameFromFlightId(@PathVariable("flightId") Integer flightId) {
         Flight flight = flights.get(flightId);
-        if (flight == null) {
+        if (flight == null || flight.getFromCity() == null) {
             return null;
         }
         return flight.getFromCity().name();
     }
-      
+
     @GetMapping("/calculate-revenue-collected/{flightId}")
     public int calculateRevenueOfAFlight(@PathVariable("flightId") Integer flightId) {
         Flight flight = flights.get(flightId);
-        if (flight == null) {
+        if (flight == null || flight.getBookings() == null) {
             return 0;
         }
 
         int totalRevenue = 3000 * flight.getBookings().size();
         return totalRevenue;
     }
-    
 
-     @PostMapping("/add-passenger")
+
+    @PostMapping("/add-passenger")
     public String addPassenger(@RequestBody Passenger passenger) {
         passengers.put(passenger.getPassengerId(), passenger);
         return "SUCCESS";
